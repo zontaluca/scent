@@ -1,0 +1,376 @@
+/* ============================================================
+   SCENT Design System — Global Styles (Next.js entry)
+   Fonts + tokens (colors / typography / spacing) + base reset +
+   strato responsive, uniti in un unico file globale.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* ============================================================
+   Color Tokens
+   ============================================================ */
+:root {
+  /* --- Sage (Primary) --- */
+  --color-sage-50:  #EEF5EE;
+  --color-sage-100: #D6EBD7;
+  --color-sage-200: #AED6AF;
+  --color-sage-300: #7DBD80;
+  --color-sage-400: #55A05A;
+  --color-sage-500: #3A8A50;
+  --color-sage-600: #2F7141;
+  --color-sage-700: #245834;
+  --color-sage-800: #1A3F26;
+  --color-sage-900: #0F2718;
+
+  /* --- Eucalyptus (Secondary) --- */
+  --color-eucalyptus-50:  #E8F4F3;
+  --color-eucalyptus-100: #C5E5E3;
+  --color-eucalyptus-200: #8CCCCA;
+  --color-eucalyptus-300: #52B3B0;
+  --color-eucalyptus-400: #299C98;
+  --color-eucalyptus-500: #1A8582;
+  --color-eucalyptus-600: #146C6A;
+  --color-eucalyptus-700: #0F5553;
+  --color-eucalyptus-800: #0A3D3B;
+  --color-eucalyptus-900: #052524;
+
+  /* --- Magenta (Brand — logo nodes) --- */
+  --color-magenta-50:  #F9EDF6;
+  --color-magenta-100: #F0CEEA;
+  --color-magenta-200: #E09ED4;
+  --color-magenta-300: #CF6EBE;
+  --color-magenta-400: #BF3EA8;
+  --color-magenta-500: #8C2F74;
+  --color-magenta-600: #72265E;
+  --color-magenta-700: #591E49;
+  --color-magenta-800: #3F1535;
+  --color-magenta-900: #260C20;
+
+  /* --- Lime (Brand — logo lines) --- */
+  --color-lime-50:  #F5F9E4;
+  --color-lime-100: #EBF2C1;
+  --color-lime-200: #D7E686;
+  --color-lime-300: #C4D94B;
+  --color-lime-400: #BFCA3D;
+  --color-lime-500: #A2AD2A;
+  --color-lime-600: #818D1D;
+  --color-lime-700: #626B12;
+  --color-lime-800: #434A0C;
+  --color-lime-900: #252906;
+
+  /* --- Neutral --- */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F6F7F4;
+  --color-neutral-100: #EAECE6;
+  --color-neutral-200: #D3D6CC;
+  --color-neutral-300: #B3B8A8;
+  --color-neutral-400: #8E9484;
+  --color-neutral-500: #6B7163;
+  --color-neutral-600: #52574B;
+  --color-neutral-700: #3B3F35;
+  --color-neutral-800: #272A22;
+  --color-neutral-900: #161814;
+
+  /* --- Semantic: Surfaces --- */
+  --surface-page:        var(--color-neutral-50);
+  --surface-base:        var(--color-neutral-0);
+  --surface-raised:      var(--color-neutral-0);
+  --surface-sunken:      var(--color-neutral-100);
+  --surface-overlay:     rgba(22, 24, 20, 0.55);
+  --surface-brand:       var(--color-sage-500);
+  --surface-brand-subtle: var(--color-sage-50);
+
+  /* --- Semantic: Text --- */
+  --text-primary:        var(--color-neutral-900);
+  --text-secondary:      var(--color-neutral-600);
+  --text-tertiary:       var(--color-neutral-400);
+  --text-inverse:        var(--color-neutral-0);
+  --text-brand:          var(--color-sage-600);
+  --text-brand-strong:   var(--color-sage-700);
+  --text-link:           var(--color-eucalyptus-600);
+  --text-link-hover:     var(--color-eucalyptus-700);
+
+  /* --- Semantic: Borders --- */
+  --border-subtle:       var(--color-neutral-100);
+  --border-default:      var(--color-neutral-200);
+  --border-strong:       var(--color-neutral-300);
+  --border-brand:        var(--color-sage-400);
+  --border-focus:        var(--color-eucalyptus-400);
+
+  /* --- Interactive --- */
+  --interactive-primary:         var(--color-sage-500);
+  --interactive-primary-hover:   var(--color-sage-600);
+  --interactive-primary-active:  var(--color-sage-700);
+  --interactive-secondary:       var(--color-eucalyptus-500);
+  --interactive-secondary-hover: var(--color-eucalyptus-600);
+
+  /* --- Status --- */
+  --status-success-bg:   var(--color-sage-50);
+  --status-success-text: var(--color-sage-700);
+  --status-success-border: var(--color-sage-200);
+  --status-warning-bg:   #FFF8E6;
+  --status-warning-text: #7A5A00;
+  --status-warning-border: #EDD97A;
+  --status-error-bg:     #FDF0EF;
+  --status-error-text:   #8B2015;
+  --status-error-border: #E8A99F;
+  --status-info-bg:      var(--color-eucalyptus-50);
+  --status-info-text:    var(--color-eucalyptus-700);
+  --status-info-border:  var(--color-eucalyptus-200);
+
+  /* ==========================================================
+     Typography Tokens
+     ========================================================== */
+  --font-display: 'Instrument Serif', 'Georgia', serif;
+  --font-sans:    'DM Sans', 'system-ui', sans-serif;
+  --font-mono:    'IBM Plex Mono', 'Courier New', monospace;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+  --text-7xl:  4.5rem;
+
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --leading-none:    1;
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose:   1.8;
+
+  --tracking-tighter: -0.04em;
+  --tracking-tight:   -0.02em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.04em;
+  --tracking-wider:    0.08em;
+  --tracking-widest:   0.12em;
+
+  --type-display-font:     var(--font-display);
+  --type-display-weight:   var(--weight-regular);
+  --type-display-leading:  var(--leading-tight);
+  --type-display-tracking: var(--tracking-tight);
+
+  --type-heading-font:     var(--font-sans);
+  --type-heading-weight:   var(--weight-semibold);
+  --type-heading-leading:  var(--leading-snug);
+  --type-heading-tracking: var(--tracking-tight);
+
+  --type-body-font:        var(--font-sans);
+  --type-body-weight:      var(--weight-regular);
+  --type-body-leading:     var(--leading-relaxed);
+  --type-body-tracking:    var(--tracking-normal);
+
+  --type-label-font:       var(--font-sans);
+  --type-label-weight:     var(--weight-medium);
+  --type-label-leading:    var(--leading-tight);
+  --type-label-tracking:   var(--tracking-wide);
+
+  /* ==========================================================
+     Spacing, Radius, Elevation
+     ========================================================== */
+  --space-0:    0px;
+  --space-0-5:  2px;
+  --space-1:    4px;
+  --space-1-5:  6px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-14:   56px;
+  --space-16:   64px;
+  --space-20:   80px;
+  --space-24:   96px;
+  --space-32:   128px;
+  --space-40:   160px;
+  --space-48:   192px;
+
+  --width-xs:   320px;
+  --width-sm:   480px;
+  --width-md:   640px;
+  --width-lg:   768px;
+  --width-xl:   1024px;
+  --width-2xl:  1280px;
+  --width-3xl:  1440px;
+  --width-prose: 65ch;
+  --width-content: 1100px;
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-3xl:  32px;
+  --radius-full: 9999px;
+
+  --shadow-xs:  0 1px 2px 0 rgba(22, 24, 20, 0.06);
+  --shadow-sm:  0 1px 4px 0 rgba(22, 24, 20, 0.08), 0 1px 2px 0 rgba(22, 24, 20, 0.04);
+  --shadow-md:  0 4px 12px 0 rgba(22, 24, 20, 0.10), 0 1px 4px 0 rgba(22, 24, 20, 0.06);
+  --shadow-lg:  0 8px 24px 0 rgba(22, 24, 20, 0.12), 0 2px 8px 0 rgba(22, 24, 20, 0.06);
+  --shadow-xl:  0 16px 48px 0 rgba(22, 24, 20, 0.14), 0 4px 16px 0 rgba(22, 24, 20, 0.08);
+  --shadow-inner: inset 0 1px 3px 0 rgba(22, 24, 20, 0.08);
+  --shadow-focus: 0 0 0 3px rgba(26, 133, 130, 0.30);
+
+  --ease-default:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 350ms;
+}
+
+/* ============================================================
+   Base Reset & Defaults
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-primary);
+  background-color: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--type-heading-font);
+  font-weight: var(--type-heading-weight);
+  line-height: var(--type-heading-leading);
+  letter-spacing: var(--type-heading-tracking);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--text-5xl); }
+h2 { font-size: var(--text-4xl); }
+h3 { font-size: var(--text-3xl); }
+h4 { font-size: var(--text-2xl); }
+h5 { font-size: var(--text-xl); }
+h6 { font-size: var(--text-lg); }
+
+.display {
+  font-family: var(--type-display-font);
+  font-weight: var(--type-display-weight);
+  line-height: var(--type-display-leading);
+  letter-spacing: var(--type-display-tracking);
+}
+
+p { max-width: var(--width-prose); color: var(--text-secondary); }
+
+a {
+  color: var(--text-link);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: color var(--duration-fast) var(--ease-out),
+              text-decoration-color var(--duration-fast) var(--ease-out);
+}
+a:hover { color: var(--text-link-hover); text-decoration-color: currentColor; }
+
+strong { font-weight: var(--weight-semibold); }
+
+code, pre { font-family: var(--font-mono); font-size: var(--text-sm); }
+code {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.4em;
+}
+
+:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: var(--radius-md); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================
+   Strato responsive (mobile + tablet)
+   ============================================================ */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, canvas { max-width: 100%; }
+* { min-width: 0; }
+
+@media (max-width: 920px) {
+  :root {
+    --text-7xl: 3.5rem;
+    --text-6xl: 3rem;
+    --text-5xl: 2.5rem;
+    --text-4xl: 2rem;
+    --space-24: 72px;
+    --space-20: 60px;
+    --space-16: 48px;
+  }
+  .r-hero-grid,
+  .r-device-grid,
+  .r-val-grid,
+  .v1-award-hero { grid-template-columns: 1fr !important; gap: var(--space-10) !important; }
+  .r-hero-visual { min-height: 320px !important; }
+  .r-stats-grid,
+  .r-spec-grid,
+  .r-how-grid,
+  .r-awards-items,
+  .r-team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --text-7xl: 2.75rem;
+    --text-6xl: 2.375rem;
+    --text-5xl: 2rem;
+    --text-4xl: 1.75rem;
+    --text-3xl: 1.5rem;
+    --text-2xl: 1.375rem;
+    --text-xl:  1.125rem;
+    --space-24: 56px;
+    --space-20: 44px;
+    --space-16: 40px;
+    --space-10: 32px;
+  }
+  .r-stats-grid,
+  .r-how-grid,
+  .r-awards-items,
+  .r-team-grid,
+  .r-device-features,
+  .r-contact-names { grid-template-columns: 1fr !important; }
+  .r-footer-grid { grid-template-columns: 1fr 1fr !important; gap: var(--space-8) !important; }
+  .r-footer-grid > :first-child { grid-column: 1 / -1; }
+  .r-device-media { height: 320px !important; }
+  .r-press-banner { flex-direction: column; align-items: flex-start !important; gap: var(--space-3) !important; }
+}
+
+.r-nav-hamburger { display: none; }
+
+@media (max-width: 860px) {
+  .r-nav-links { display: none !important; }
+  .r-nav-hamburger { display: inline-flex !important; }
+}
+
+@media (max-width: 460px) {
+  .r-nav-cta { display: none !important; }
+}

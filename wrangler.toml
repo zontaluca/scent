@@ -1,0 +1,6 @@
+name = "scent-website"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# Output di @cloudflare/next-on-pages (generato da `npm run pages:build`).
+pages_build_output_dir = ".vercel/output/static"
