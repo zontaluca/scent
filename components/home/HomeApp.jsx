@@ -7,7 +7,7 @@
 // ============================================================
 import React from 'react';
 import { Button, Badge, StatCard, Card, Input, Alert } from '../ds';
-import { Reveal, MoleculeMotif, LangToggle, Icon, reduceMotion, useLang } from '../common';
+import { Reveal, MoleculeMotif, AnimatedMolecule, LangToggle, Icon, reduceMotion, useLang } from '../common';
 import { SCENT_CONTENT } from '../../lib/content';
 
 const LOGO = '/assets/logo_scent.png';
@@ -132,7 +132,7 @@ function V1HeroVisual() {
 function V1Hero({ c, onNav }) {
   return (
     <section id="top" style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg, var(--color-sage-50) 0%, var(--surface-page) 100%)' }}>
-      <MoleculeMotif style={{ position: 'absolute', top: '7%', right: '-30px', width: '520px', opacity: 0.5 }} />
+      <AnimatedMolecule style={{ position: 'absolute', top: '4%', right: '-60px', width: '640px', opacity: 0.45 }} />
       <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: 'var(--space-20) var(--space-6) var(--space-16)', position: 'relative' }}>
         <div className="r-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-16)', alignItems: 'center' }}>
           <Reveal>
@@ -253,8 +253,13 @@ function V1How({ c }) {
         </Reveal>
         <div className="r-how-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-6)' }}>
           {c.how.steps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 110} style={{ borderTop: '2px solid var(--color-lime-400)', paddingTop: 'var(--space-5)' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)', color: 'var(--color-lime-400)', marginBottom: 'var(--space-4)' }}>{s.n}</div>
+            <Reveal key={s.n} delay={i * 110}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+                <span style={{ width: '56px', height: '56px', borderRadius: 'var(--radius-full)', border: '1.5px solid var(--color-lime-400)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-lg)', color: 'var(--color-lime-300)', flexShrink: 0 }}>{s.n}</span>
+                {i < c.how.steps.length - 1 && (
+                  <span aria-hidden="true" style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, var(--color-lime-400), rgba(191,202,61,0.12))' }}></span>
+                )}
+              </div>
               <div style={{ fontSize: 'var(--text-2xl)', fontWeight: 600, color: 'var(--color-neutral-0)', marginBottom: 'var(--space-3)', letterSpacing: 'var(--tracking-tight)' }}>{s.t}</div>
               <div style={{ fontSize: 'var(--text-base)', color: 'var(--color-sage-200)', lineHeight: 'var(--leading-relaxed)' }}>{s.d}</div>
             </Reveal>
@@ -386,8 +391,10 @@ function V1Press({ c }) {
 
 function V1Team({ c }) {
   return (
-    <section id="team" style={{ background: 'var(--surface-base)', borderTop: '1px solid var(--border-subtle)', padding: 'var(--space-24) 0', scrollMarginTop: '72px' }}>
-      <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)' }}>
+    <section id="team" style={{ background: 'var(--surface-base)', borderTop: '1px solid var(--border-subtle)', padding: 'var(--space-24) 0', scrollMarginTop: '72px', position: 'relative', overflow: 'hidden' }}>
+      <style>{'.v2-team-card img{transition:border-color var(--duration-base) var(--ease-default), transform var(--duration-base) var(--ease-default)}.v2-team-card:hover img{border-color:var(--color-sage-400);transform:scale(1.04)}'}</style>
+      <MoleculeMotif style={{ position: 'absolute', top: '-30px', right: '-50px', width: '380px', opacity: 0.2 }} />
+      <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)', position: 'relative' }}>
         <Reveal style={{ maxWidth: '640px', marginBottom: 'var(--space-12)' }}>
           <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--text-brand)', marginBottom: 'var(--space-3)' }}>{c.team.kicker}</div>
           <h2 style={{ fontSize: 'var(--text-4xl)', fontWeight: 600, letterSpacing: 'var(--tracking-tight)', marginBottom: 'var(--space-4)' }}>{c.team.title}</h2>
@@ -395,14 +402,14 @@ function V1Team({ c }) {
         </Reveal>
         <div className="r-team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)', marginBottom: 'var(--space-8)' }}>
           {c.team.people.map((m, i) => (
-            <Reveal key={m.name} delay={(i % 3) * 80}>
+            <Reveal key={m.name} delay={(i % 3) * 80} className="v2-team-card">
               <Card variant="outline" padding="md" hover>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
                   <img
                     src={m.img}
                     alt={m.name}
                     loading="lazy"
-                    style={{ width: '72px', height: '72px', borderRadius: 'var(--radius-full)', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--color-sage-100)', background: 'var(--color-sage-50)' }}
+                    style={{ width: '88px', height: '88px', borderRadius: 'var(--radius-full)', objectFit: 'cover', flexShrink: 0, border: '3px solid var(--color-sage-200)', background: 'var(--color-sage-50)' }}
                   />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 'var(--leading-snug)', marginBottom: 'var(--space-1)' }}>{m.name}</div>
@@ -415,6 +422,27 @@ function V1Team({ c }) {
         </div>
         <Reveal>
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', maxWidth: 'none', fontStyle: 'italic' }}>{c.team.note}</p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function V2FinalCta({ c, onNav, lang }) {
+  const en = lang === 'en';
+  return (
+    <section style={{ background: 'var(--color-sage-900)', position: 'relative', overflow: 'hidden', padding: 'var(--space-20) 0' }}>
+      <MoleculeMotif style={{ position: 'absolute', bottom: '-40px', left: '-50px', width: '420px', opacity: 0.16 }} edgeColor="var(--color-lime-300)" nodeColor="var(--color-lime-200)" />
+      <MoleculeMotif style={{ position: 'absolute', top: '-30px', right: '-60px', width: '380px', opacity: 0.12 }} edgeColor="var(--color-lime-300)" nodeColor="var(--color-magenta-300)" />
+      <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center', padding: '0 var(--space-6)', position: 'relative' }}>
+        <Reveal>
+          <h2 className="display" style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'var(--text-6xl)', color: 'var(--color-neutral-0)', lineHeight: 1.08, marginBottom: 'var(--space-5)' }}>
+            {en ? 'See SCENT A1 up close.' : 'Scopri SCENT A1 da vicino.'}
+          </h2>
+          <p style={{ fontSize: 'var(--text-lg)', color: 'var(--color-sage-200)', margin: '0 auto var(--space-8)', maxWidth: '520px' }}>
+            {en ? 'A demo with our team is the quickest way to evaluate the device for your facility.' : 'Una demo con il nostro team è il modo più rapido per valutare il dispositivo per la tua struttura.'}
+          </p>
+          <Button variant="primary" size="lg" onClick={() => onNav('contatti')}>{c.nav.cta}</Button>
         </Reveal>
       </div>
     </section>
@@ -511,6 +539,7 @@ export default function HomeApp() {
         <V1Awards c={c} />
         <V1Press c={c} />
         <V1Team c={c} />
+        <V2FinalCta c={c} onNav={onNav} lang={lang} />
         <V1Contact c={c} />
       </main>
       <V1Footer c={c} />

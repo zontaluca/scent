@@ -39,65 +39,6 @@ function ScrollMolecule({ style }) {
   );
 }
 
-// --- Timeline che si traccia dall'alto ---------------------
-function DevTimeline({ items }) {
-  const ref = React.useRef(null);
-  const canAnim = !(reduceMotion() || typeof IntersectionObserver === 'undefined');
-  const [armed, setArmed] = React.useState(false);
-  const [play, setPlay] = React.useState(!canAnim);
-  React.useEffect(() => {
-    if (!canAnim) return;
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    if (r.top < (window.innerHeight || 800) * 0.9) { setPlay(true); return; }
-    setArmed(true);
-    const io = new IntersectionObserver((es) => {
-      es.forEach((e) => { if (e.isIntersecting) { setPlay(true); io.disconnect(); } });
-    }, { threshold: 0.18 });
-    io.observe(el);
-    const safety = setTimeout(() => setPlay(true), 2200);
-    return () => { io.disconnect(); clearTimeout(safety); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const hidden = armed && !play;
-  return (
-    <div ref={ref} style={{ position: 'relative', paddingLeft: 'var(--space-8)' }}>
-      <div style={{ position: 'absolute', left: '7px', top: '6px', bottom: '6px', width: '2px', background: 'var(--color-sage-200)' }} />
-      <div style={{
-        position: 'absolute', left: '7px', top: '6px', bottom: '6px', width: '2px',
-        background: 'linear-gradient(var(--color-sage-400), var(--color-magenta-400))',
-        transform: hidden ? 'scaleY(0)' : 'scaleY(1)', transformOrigin: 'top center',
-        transition: armed ? 'transform 1100ms var(--ease-default)' : 'none',
-      }} />
-      {items.map((t, i) => {
-        const last = i === items.length - 1;
-        const dotDelay = 280 + i * 280;
-        const txtDelay = 380 + i * 280;
-        return (
-          <div key={i} style={{ position: 'relative', paddingBottom: last ? 0 : 'var(--space-8)' }}>
-            <span style={{
-              position: 'absolute', left: '-30px', top: '3px', width: '16px', height: '16px', borderRadius: '50%',
-              background: last ? 'var(--color-magenta-500)' : 'var(--color-sage-500)',
-              border: '3px solid var(--surface-base)', boxShadow: '0 0 0 1px var(--color-sage-200)',
-              transform: hidden ? 'scale(0)' : 'scale(1)', opacity: hidden ? 0 : 1, transformOrigin: 'center',
-              transition: armed ? `transform 460ms var(--ease-default) ${dotDelay}ms, opacity 300ms var(--ease-default) ${dotDelay}ms` : 'none',
-            }} />
-            <div style={{
-              opacity: hidden ? 0 : 1, transform: hidden ? 'translateY(8px)' : 'none',
-              transition: armed ? `opacity 540ms var(--ease-default) ${txtDelay}ms, transform 540ms var(--ease-default) ${txtDelay}ms` : 'none',
-            }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', color: 'var(--text-brand)', marginBottom: 'var(--space-1)', fontWeight: 600 }}>{t.date}</div>
-              <div style={{ fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 'var(--space-1)' }}>{t.t}</div>
-              <div style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)', maxWidth: '44ch' }}>{t.d}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 function DevNav({ d, lang, setLang, onNav }) {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const go = (id) => { setMenuOpen(false); onNav(id); };
@@ -194,8 +135,15 @@ function DevHero({ d }) {
           </Reveal>
         </div>
         <Reveal delay={180}>
-          <div className="r-spec-grid" style={{ marginTop: 'var(--space-12)', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-5)', borderTop: '1px solid var(--border-subtle)', paddingTop: 'var(--space-8)' }}>
-            {h.spec.map((s, i) => (
+          <div className="r-spec-grid" style={{ marginTop: 'var(--space-12)', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-5)', background: 'var(--color-sage-50)', border: '1px solid var(--color-sage-200)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-6) var(--space-8)' }}>
+            {(h.stats || []).map((s, i) => (
+              <div key={'st' + i}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>{s.label}</div>
+                <CountUp value={s.value} style={{ display: 'block', fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: 'var(--text-4xl)', letterSpacing: 'var(--tracking-tighter)', lineHeight: 1, color: i === 0 ? 'var(--color-sage-700)' : 'var(--color-eucalyptus-600)' }} />
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', marginTop: 'var(--space-2)' }}>{s.sub}</div>
+              </div>
+            ))}
+            {h.spec.slice(2).map((s, i) => (
               <div key={i}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 'var(--space-2)' }}>{s.k}</div>
                 <div style={{ fontSize: 'var(--text-base)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 'var(--leading-snug)' }}>{s.v}</div>
@@ -210,42 +158,71 @@ function DevHero({ d }) {
 
 function DevOverview({ d }) {
   const o = d.overview;
+  const cmp = o.compare;
+  const [open, setOpen] = React.useState(false);
   return (
     <section id="panoramica" style={{ padding: 'var(--space-24) 0', scrollMarginTop: '72px', position: 'relative', overflow: 'hidden' }}>
-      <img src={DEV_SKETCH} alt="" aria-hidden="true" style={{
-        position: 'absolute', top: '50%', right: '-60px', transform: 'translateY(-50%)',
-        width: 'min(620px, 50%)', height: 'auto', opacity: 0.1, mixBlendMode: 'multiply',
-        pointerEvents: 'none', userSelect: 'none',
-        maskImage: 'radial-gradient(120% 100% at 80% 50%, #000 45%, transparent 85%)',
-        WebkitMaskImage: 'radial-gradient(120% 100% at 80% 50%, #000 45%, transparent 85%)',
-      }} />
       <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)', position: 'relative' }}>
-        <div className="r-val-grid" style={{ display: 'grid', gridTemplateColumns: '1.35fr 0.65fr', gap: 'var(--space-16)', alignItems: 'start' }}>
+        <Reveal style={{ maxWidth: '720px', marginBottom: 'var(--space-10)' }}>
+          <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--text-brand)', marginBottom: 'var(--space-3)' }}>{o.kicker}</div>
+          <h2 style={{ fontSize: 'var(--text-4xl)', fontWeight: 600, letterSpacing: 'var(--tracking-tight)', marginBottom: 'var(--space-5)', maxWidth: '20ch' }}>{o.title}</h2>
+          <p style={{ fontSize: 'var(--text-xl)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)', margin: 0, textWrap: 'pretty' }}>{cmp.lead}</p>
+        </Reveal>
+        <div className="r-val-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-6)', alignItems: 'stretch' }}>
           <Reveal>
-            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--text-brand)', marginBottom: 'var(--space-3)' }}>{o.kicker}</div>
-            <h2 style={{ fontSize: 'var(--text-4xl)', fontWeight: 600, letterSpacing: 'var(--tracking-tight)', marginBottom: 'var(--space-6)', maxWidth: '20ch' }}>{o.title}</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)', maxWidth: '62ch' }}>
+            <DCd variant="outline" padding="lg" style={{ height: '100%' }}>
+              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 'var(--space-5)' }}>{cmp.today.h}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                {cmp.today.items.map((t, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-neutral-400)', marginTop: '7px', flexShrink: 0 }} />
+                    <span style={{ fontSize: 'var(--text-base)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)' }}>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </DCd>
+          </Reveal>
+          <Reveal delay={100}>
+            <DCd variant="brand" padding="lg" style={{ height: '100%' }}>
+              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--text-brand)', marginBottom: 'var(--space-5)' }}>{cmp.scent.h}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                {cmp.scent.items.map((t, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+                    <Icon name="check" size={16} color="var(--color-sage-600)" style={{ marginTop: '4px', flexShrink: 0 }} />
+                    <span style={{ fontSize: 'var(--text-base)', color: 'var(--text-primary)', lineHeight: 'var(--leading-relaxed)' }}>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </DCd>
+          </Reveal>
+        </div>
+        <Reveal delay={140} style={{ marginTop: 'var(--space-8)' }}>
+          <button type="button" onClick={() => setOpen(v => !v)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-brand)', fontFamily: 'var(--font-sans)' }}>
+            {open ? cmp.less : cmp.more}
+            <Icon name="arrowDown" size={16} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform var(--duration-base) var(--ease-default)' }} />
+          </button>
+          {open && (
+            <div style={{ marginTop: 'var(--space-5)', display: 'flex', flexDirection: 'column', gap: 'var(--space-5)', maxWidth: '62ch' }}>
               {o.paragraphs.map((p, i) => (
                 <p key={i} style={{ fontSize: 'var(--text-lg)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)', margin: 0, textWrap: 'pretty' }}>{p}</p>
               ))}
             </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-              {o.highlights.map((hl, i) => (
-                <DCd key={i} variant={i === 0 ? 'brand' : 'outline'} padding="md">
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-sage-500)', marginTop: '7px', flexShrink: 0 }} />
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: 'var(--text-base)', marginBottom: 'var(--space-1)', color: 'var(--text-primary)' }}>{hl.t}</div>
-                      <div style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 'var(--leading-relaxed)' }}>{hl.d}</div>
-                    </div>
-                  </div>
-                </DCd>
-              ))}
-            </div>
-          </Reveal>
-        </div>
+          )}
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function DevQuote({ d }) {
+  if (!d.pullquote) return null;
+  return (
+    <section style={{ padding: 'var(--space-20) 0 0' }}>
+      <div style={{ maxWidth: '880px', margin: '0 auto', padding: '0 var(--space-6)', textAlign: 'center' }}>
+        <Reveal>
+          <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: 'var(--color-magenta-500)', marginBottom: 'var(--space-5)' }} />
+          <p className="display" style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'var(--text-5xl)', lineHeight: 1.15, letterSpacing: 'var(--tracking-tight)', color: 'var(--text-primary)', margin: 0, textWrap: 'pretty' }}>{d.pullquote}</p>
+        </Reveal>
       </div>
     </section>
   );
@@ -350,9 +327,15 @@ function DevValidation({ d }) {
                 {va.statsNote && (
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', color: 'var(--text-tertiary)', marginTop: 'var(--space-4)' }}>{va.statsNote}</div>
                 )}
+                {va.articleUrl && (
+                  <div style={{ marginTop: 'var(--space-4)' }}>
+                    <a href={va.articleUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                      <DB variant="outline" size="sm" icon={<Icon name="external" size={15} />} iconPosition="right">{va.articleLabel}</DB>
+                    </a>
+                  </div>
+                )}
               </div>
             )}
-            <DevTimeline items={va.timeline} />
           </Reveal>
           <Reveal delay={120}>
             <DCd variant="raised" padding="lg">
@@ -380,14 +363,24 @@ function DevValidation({ d }) {
 
 function DevCta({ d }) {
   const ct = d.cta;
+  const articleUrl = d.validation.articleUrl;
   return (
-    <section id="contatto-cta" style={{ background: 'linear-gradient(180deg, var(--surface-page), var(--color-sage-50))', padding: 'var(--space-24) 0', scrollMarginTop: '72px' }}>
-      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 var(--space-6)', textAlign: 'center' }}>
+    <section id="contatto-cta" style={{ background: 'linear-gradient(180deg, var(--surface-page), var(--color-sage-50))', padding: 'var(--space-24) 0', scrollMarginTop: '72px', position: 'relative', overflow: 'hidden' }}>
+      <img src={DEV_SKETCH} alt="" aria-hidden="true" style={{
+        position: 'absolute', top: '50%', left: '-70px', transform: 'translateY(-50%)',
+        width: 'min(460px, 36%)', height: 'auto', opacity: 0.12, mixBlendMode: 'multiply',
+        pointerEvents: 'none', userSelect: 'none',
+        maskImage: 'radial-gradient(120% 100% at 20% 50%, #000 45%, transparent 85%)',
+        WebkitMaskImage: 'radial-gradient(120% 100% at 20% 50%, #000 45%, transparent 85%)',
+      }} />
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 var(--space-6)', textAlign: 'center', position: 'relative' }}>
         <h2 className="display" style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'var(--text-6xl)', lineHeight: 1.1, marginBottom: 'var(--space-4)' }}>{ct.title}</h2>
         <p style={{ fontSize: 'var(--text-lg)', color: 'var(--text-secondary)', margin: '0 auto var(--space-8)', maxWidth: '540px' }}>{ct.lead}</p>
         <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href={DEV_HOME + '#contatti'} style={{ textDecoration: 'none' }}><DB variant="primary" size="lg">{ct.primary}</DB></a>
-          <DB variant="outline" size="lg" icon={<Icon name="external" size={16} />} iconPosition="right">{ct.secondary}</DB>
+          <a href={articleUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <DB variant="outline" size="lg" icon={<Icon name="external" size={16} />} iconPosition="right">{ct.secondary}</DB>
+          </a>
         </div>
       </div>
     </section>
@@ -442,6 +435,7 @@ export default function DeviceApp() {
         <DevHero d={d} />
         <DevOverview d={d} />
         <DevPrinciple d={d} />
+        <DevQuote d={d} />
         <DevVideo d={d} lang={lang} />
         <DevValidation d={d} />
         <DevCta d={d} />
