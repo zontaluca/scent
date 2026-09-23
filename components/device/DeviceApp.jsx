@@ -9,6 +9,7 @@ import { Button as DB, Badge as DBd, StatCard as DSt, Card as DCd, Alert as DAl 
 import { Reveal, CountUp, MoleculeMotif, AnimatedMolecule, LangToggle, Icon, reduceMotion, useLang } from '../common';
 import { SCENT_DEVICE } from '../../lib/device-content';
 import { SCENT_CONTENT } from '../../lib/content';
+import SiteFooter from '../nav/SiteFooter';
 
 const DEV_LOGO = '/assets/logo_scent.png';
 const DEV_IMG = '/uploads/sistema.png';
@@ -241,8 +242,13 @@ function DevPrinciple({ d }) {
         </Reveal>
         <div className="r-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-5)' }}>
           {pr.steps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 100} style={{ borderTop: '2px solid var(--color-lime-400)', paddingTop: 'var(--space-5)', position: 'relative' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)', color: 'var(--color-lime-400)', marginBottom: 'var(--space-4)' }}>{s.n}</div>
+            <Reveal key={s.n} delay={i * 100}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+                <span style={{ width: '56px', height: '56px', borderRadius: 'var(--radius-full)', border: '1.5px solid var(--color-lime-400)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-lg)', color: 'var(--color-lime-300)', flexShrink: 0 }}>{s.n}</span>
+                {i < pr.steps.length - 1 && (
+                  <span aria-hidden="true" style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, var(--color-lime-400), rgba(191,202,61,0.12))' }} />
+                )}
+              </div>
               <div style={{ fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--color-neutral-0)', marginBottom: 'var(--space-3)', letterSpacing: 'var(--tracking-tight)' }}>{s.t}</div>
               <div style={{ fontSize: 'var(--text-base)', color: 'var(--color-sage-200)', lineHeight: 'var(--leading-relaxed)' }}>{s.d}</div>
             </Reveal>
@@ -250,7 +256,7 @@ function DevPrinciple({ d }) {
         </div>
         <Reveal delay={120} style={{ marginTop: 'var(--space-10)' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-3)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3) var(--space-5)' }}>
-            <span style={{ fontSize: 'var(--text-base)' }}>❄</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sage-200)" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ flexShrink: 0 }}><path d="M12 2v20M4 6l16 12M20 6L4 18" /></svg>
             <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-sage-200)' }}>{pr.note}</span>
           </div>
         </Reveal>
@@ -261,7 +267,6 @@ function DevPrinciple({ d }) {
 
 function DevVideo({ d, lang }) {
   const v = d.video;
-  const [playing, setPlaying] = React.useState(false);
   return (
     <section id="video" style={{ padding: 'var(--space-24) 0', scrollMarginTop: '72px' }}>
       <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)' }}>
@@ -272,34 +277,14 @@ function DevVideo({ d, lang }) {
         </Reveal>
         <Reveal delay={100}>
           <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-md)', background: 'radial-gradient(120% 100% at 80% 8%, #16401f, #0F2718 58%, #0a1c11)' }}>
-            {playing ? (
-              <iframe
-                src={`https://www.youtube.com/embed/${v.youtubeId}?autoplay=1&rel=0`}
-                title={v.caption}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <>
-                <style>{'.dev-video-btn .dev-play{transition:transform var(--duration-base,.2s) var(--ease-default);}.dev-video-btn:hover .dev-play{transform:scale(1.09) !important;}.dev-video-btn:active .dev-play{transform:scale(.97) !important;}.dev-video-btn:hover .dev-yt-chip{opacity:1 !important;transform:translateY(0) !important;}'}</style>
-                <MoleculeMotif style={{ position: 'absolute', top: '8%', right: '-20px', width: '46%', opacity: 0.4 }} edgeColor="var(--color-lime-300)" nodeColor="var(--color-lime-200)" />
-                <button type="button" onClick={() => setPlaying(true)} className="dev-video-btn" aria-label={v.play}
-                  style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', background: 'none', border: 0, padding: 0, cursor: 'pointer' }}>
-                  <span className="dev-play" style={{ width: '92px', height: '92px', borderRadius: '50%', background: 'rgba(255,255,255,0.96)', boxShadow: '0 12px 32px rgba(10,28,17,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'transform .2s var(--ease-default)' }}>
-                    <svg width="30" height="34" viewBox="0 0 30 34" fill="none" aria-hidden="true"><path d="M28 15.27a2 2 0 0 1 0 3.46L4 32.66A2 2 0 0 1 1 30.93V3.07A2 2 0 0 1 4 1.34l24 13.93Z" fill="var(--color-sage-700)"/></svg>
-                  </span>
-                  <span className="dev-yt-chip" style={{ position: 'absolute', top: 'var(--space-5)', right: 'var(--space-5)', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 'var(--radius-full)', padding: '6px 12px', opacity: 0, transform: 'translateY(-4px)', transition: 'opacity .2s var(--ease-default), transform .2s var(--ease-default)' }}>
-                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M15.68 1.87A2 2 0 0 0 14.28.46C13.04.1 8 .1 8 .1S2.96.1 1.72.46A2 2 0 0 0 .32 1.87C0 3.1 0 5.66 0 5.66s0 2.56.32 3.8a2 2 0 0 0 1.4 1.4C2.96 11.22 8 11.22 8 11.22s5.04 0 6.28-.36a2 2 0 0 0 1.4-1.4C16 8.22 16 5.66 16 5.66s0-2.56-.32-3.8Z" fill="#FF0000"/><path d="M6.36 8.09 10.55 5.66 6.36 3.23v4.86Z" fill="#fff"/></svg>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', color: 'var(--color-neutral-0)', whiteSpace: 'nowrap' }}>{lang === 'en' ? 'Play video' : 'Riproduci video'}</span>
-                  </span>
-                  <span style={{ position: 'absolute', left: 'var(--space-6)', bottom: 'var(--space-6)', right: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', textAlign: 'left', pointerEvents: 'none' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wider)', textTransform: 'uppercase', color: 'var(--color-lime-300)' }}>{v.meta}</span>
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', color: 'var(--color-neutral-0)', lineHeight: 1.15 }}>{v.caption}</span>
-                  </span>
-                </button>
-              </>
-            )}
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0&modestbranding=1${lang === 'en' ? '&cc_load_policy=1&cc_lang_pref=en&hl=en' : ''}`}
+              title={v.caption}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
           </div>
         </Reveal>
       </div>
@@ -329,8 +314,9 @@ function DevValidation({ d }) {
                 )}
                 {va.articleUrl && (
                   <div style={{ marginTop: 'var(--space-4)' }}>
-                    <a href={va.articleUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                      <DB variant="outline" size="sm" icon={<Icon name="external" size={15} />} iconPosition="right">{va.articleLabel}</DB>
+                    <a href={va.articleUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-brand)', textDecoration: 'none' }}>
+                      {va.articleLabel}
+                      <Icon name="external" size={15} />
                     </a>
                   </div>
                 )}
@@ -387,40 +373,6 @@ function DevCta({ d }) {
   );
 }
 
-function DevFooter({ lang }) {
-  const c = SCENT_CONTENT[lang === 'en' ? 'en' : 'it'];
-  return (
-    <footer style={{ background: 'var(--color-neutral-900)', color: 'var(--color-neutral-300)', padding: 'var(--space-16) 0 var(--space-8)' }}>
-      <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)' }}>
-        <div className="r-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 'var(--space-10)', paddingBottom: 'var(--space-12)' }}>
-          <div>
-            <div style={{ marginBottom: 'var(--space-4)' }}>
-              <img src={DEV_LOGO} alt="SCENT" style={{ height: '32px', display: 'block', filter: 'brightness(0) invert(1)' }} />
-            </div>
-            <p style={{ color: 'var(--color-neutral-400)', fontSize: 'var(--text-sm)', maxWidth: '320px', lineHeight: 'var(--leading-relaxed)' }}>{c.footer.tagline}</p>
-          </div>
-          {c.footer.columns.map(col => (
-            <div key={col.h}>
-              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 'var(--tracking-wider)', color: 'var(--color-neutral-0)', marginBottom: 'var(--space-4)' }}>{col.h}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-                {col.items.map(i => {
-                  const label = typeof i === 'object' ? i.label : i;
-                  const props = typeof i === 'object' ? { href: i.href, target: '_blank', rel: 'noopener noreferrer' } : { href: DEV_HOME };
-                  return <a key={label} {...props} style={{ color: 'var(--color-neutral-400)', fontSize: 'var(--text-sm)', textDecoration: 'none' }}>{label}</a>;
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{ borderTop: '1px solid var(--color-neutral-800)', paddingTop: 'var(--space-6)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-neutral-500)' }}>{c.footer.legal}</span>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-neutral-500)', fontFamily: 'var(--font-mono)' }}>{c.footer.cert}</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function DeviceApp() {
   const [lang, setLang] = useLang();
   const d = SCENT_DEVICE[lang];
@@ -440,7 +392,7 @@ export default function DeviceApp() {
         <DevValidation d={d} />
         <DevCta d={d} />
       </main>
-      <DevFooter lang={lang} />
+      <SiteFooter c={SCENT_CONTENT[lang]} />
     </React.Fragment>
   );
 }

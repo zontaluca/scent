@@ -2,80 +2,21 @@
 // ============================================================
 // SCENT — Home (stile "Evidenza")
 // Sezioni: Nav · Hero · Stats · Dispositivo · Tecnologia ·
-//          Validazione · Premi · Stampa · Team · Contatti · Footer
-// Port Next.js di v1/sections1.jsx + v1/sections2.jsx (Claude Design).
+//          Validazione · Premi · News · Stampa · Team · CTA · Contatti · Footer
+// Port Next.js di home-v2/sections1.jsx + sections2.jsx (Claude Design).
 // ============================================================
 import React from 'react';
 import { Button, Badge, StatCard, Card, Input, Alert } from '../ds';
-import { Reveal, MoleculeMotif, AnimatedMolecule, LangToggle, Icon, reduceMotion, useLang } from '../common';
+import { Reveal, CountUp, MoleculeMotif, AnimatedMolecule, Icon, reduceMotion, useLang } from '../common';
+import SiteNav from '../nav/SiteNav';
+import SiteFooter from '../nav/SiteFooter';
+import { HomeNews } from '../news/NewsCards';
 import { SCENT_CONTENT } from '../../lib/content';
 
 const LOGO = '/assets/logo_scent.png';
 const DEVICE_IMG = '/uploads/sistema.png';
 const AWARD_IMG = '/uploads/Pavilion_Marzotto.jpg';
 const DEVICE_PAGE = '/scent-a1';
-
-function V1Nav({ c, lang, setLang, onNav, active }) {
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const go = (id) => { setMenuOpen(false); onNav(id); };
-  return (
-    <header style={{
-      position: 'sticky', top: 0, zIndex: 100,
-      background: 'rgba(255,255,255,0.82)',
-      backdropFilter: 'saturate(180%) blur(16px)',
-      WebkitBackdropFilter: 'saturate(180%) blur(16px)',
-      borderBottom: '1px solid var(--border-subtle)',
-    }}>
-      <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-6)' }}>
-        <a href="#top" onClick={(e) => { e.preventDefault(); go('top'); }} style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-          <img src={LOGO} alt="SCENT" style={{ height: '36px' }} />
-        </a>
-        <nav className="r-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-7, 28px)' }}>
-          {c.nav.links.map(l => (
-            <a key={l.id} href={`#${l.id}`} onClick={(e) => { e.preventDefault(); go(l.id); }}
-              style={{ fontSize: 'var(--text-sm)', fontWeight: 500, textDecoration: 'none', letterSpacing: 'var(--tracking-wide)', color: active === l.id ? 'var(--text-brand)' : 'var(--text-secondary)' }}>
-              {l.label}
-            </a>
-          ))}
-        </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)', flexShrink: 0 }}>
-          <LangToggle lang={lang} setLang={setLang} />
-          <span className="r-nav-cta">
-            <Button variant="primary" size="sm" onClick={() => go('contatti')}>{c.nav.cta}</Button>
-          </span>
-          <button
-            className="r-nav-hamburger"
-            aria-label={menuOpen ? 'Chiudi menu' : 'Apri menu'}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(v => !v)}
-            style={{ display: 'none', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: menuOpen ? 'var(--color-sage-50)' : 'transparent', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', cursor: 'pointer', padding: 0, flexShrink: 0 }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              {menuOpen
-                ? <React.Fragment><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></React.Fragment>
-                : <React.Fragment><line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" /></React.Fragment>}
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {menuOpen && (
-        <nav style={{ borderTop: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', padding: 'var(--space-4) var(--space-6) var(--space-6)' }}>
-          <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
-            {c.nav.links.map(l => (
-              <a key={l.id} href={`#${l.id}`} onClick={(e) => { e.preventDefault(); go(l.id); }}
-                style={{ fontSize: 'var(--text-lg)', fontWeight: 500, textDecoration: 'none', color: active === l.id ? 'var(--text-brand)' : 'var(--text-primary)', padding: 'var(--space-3) 0', borderBottom: '1px solid var(--border-subtle)' }}>
-                {l.label}
-              </a>
-            ))}
-            <div style={{ marginTop: 'var(--space-4)' }}>
-              <Button variant="primary" size="lg" fullWidth onClick={() => go('contatti')}>{c.nav.cta}</Button>
-            </div>
-          </div>
-        </nav>
-      )}
-    </header>
-  );
-}
 
 // Visual hero: il logo SCENT come protagonista. Il bersaglio concentrico del logo
 // è il sensore: emette impulsi "annusa" (radar) mentre le particelle COV vi confluiscono.
@@ -187,7 +128,7 @@ function V1Stats({ c }) {
         <div className="r-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-5)' }}>
           {c.stats.items.map((s, i) => (
             <Reveal key={i} delay={i * 80}>
-              <StatCard value={s.value} label={s.label} sublabel={s.sub} variant={variants[i]} />
+              <StatCard value={<CountUp value={s.value} />} label={s.label} sublabel={s.sub} variant={variants[i]} />
             </Reveal>
           ))}
         </div>
@@ -284,7 +225,7 @@ function V1Validation({ c }) {
               <Badge variant="default">{c.validation.badges[1]}</Badge>
               <Badge variant="success" dot>{c.validation.badges[2]}</Badge>
             </div>
-            <Button variant="outline" icon={<Icon name="external" size={16} />} iconPosition="right">{c.validation.cta}</Button>
+            <Button variant="outline" icon={<Icon name="external" size={16} />} iconPosition="right" onClick={() => window.open('https://doi.org/10.3390/cancers12061471', '_blank', 'noopener')}>{c.validation.cta}</Button>
           </Reveal>
           <Reveal delay={100}>
             <Card variant="raised" padding="lg">
@@ -484,40 +425,7 @@ function V1Contact({ c }) {
   );
 }
 
-function V1Footer({ c }) {
-  return (
-    <footer style={{ background: 'var(--color-neutral-900)', color: 'var(--color-neutral-300)', padding: 'var(--space-16) 0 var(--space-8)' }}>
-      <div style={{ maxWidth: 'var(--width-content)', margin: '0 auto', padding: '0 var(--space-6)' }}>
-        <div className="r-footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 'var(--space-10)', paddingBottom: 'var(--space-12)' }}>
-          <div>
-            <div style={{ marginBottom: 'var(--space-4)' }}>
-              <img src={LOGO} alt="SCENT" style={{ height: '32px', display: 'block', filter: 'brightness(0) invert(1)' }} />
-            </div>
-            <p style={{ color: 'var(--color-neutral-400)', fontSize: 'var(--text-sm)', maxWidth: '320px', lineHeight: 'var(--leading-relaxed)' }}>{c.footer.tagline}</p>
-          </div>
-          {c.footer.columns.map(col => (
-            <div key={col.h}>
-              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 'var(--tracking-wider)', color: 'var(--color-neutral-0)', marginBottom: 'var(--space-4)' }}>{col.h}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-                {col.items.map(i => {
-                  const label = typeof i === 'object' ? i.label : i;
-                  const props = typeof i === 'object' ? { href: i.href, target: '_blank', rel: 'noopener noreferrer' } : { href: '#', onClick: e => e.preventDefault() };
-                  return <a key={label} {...props} style={{ color: 'var(--color-neutral-400)', fontSize: 'var(--text-sm)', textDecoration: 'none' }}>{label}</a>;
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{ borderTop: '1px solid var(--color-neutral-800)', paddingTop: 'var(--space-6)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-neutral-500)' }}>{c.footer.legal}</span>
-          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-neutral-500)', fontFamily: 'var(--font-mono)' }}>{c.footer.cert}</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-export default function HomeApp() {
+export default function HomeApp({ news = [] }) {
   const [lang, setLang] = useLang();
   const [active, setActive] = React.useState('top');
   const c = SCENT_CONTENT[lang];
@@ -529,7 +437,7 @@ export default function HomeApp() {
   };
   return (
     <React.Fragment>
-      <V1Nav c={c} lang={lang} setLang={setLang} onNav={onNav} active={active} />
+      <SiteNav c={c} lang={lang} setLang={setLang} onNav={onNav} active={active} current="home" />
       <main>
         <V1Hero c={c} onNav={onNav} />
         <V1Stats c={c} />
@@ -537,12 +445,13 @@ export default function HomeApp() {
         <V1How c={c} />
         <V1Validation c={c} />
         <V1Awards c={c} />
+        <HomeNews items={news} lang={lang} ui={c.news} />
         <V1Press c={c} />
         <V1Team c={c} />
         <V2FinalCta c={c} onNav={onNav} lang={lang} />
         <V1Contact c={c} />
       </main>
-      <V1Footer c={c} />
+      <SiteFooter c={c} onNav={onNav} />
     </React.Fragment>
   );
 }

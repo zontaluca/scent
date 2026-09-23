@@ -1,4 +1,5 @@
 import HomeApp from '../components/home/HomeApp';
+import { getNewsSummaries } from '../lib/news';
 
 export const metadata = {
   title: 'SCENT A1 — Diagnostica oncologica non invasiva',
@@ -7,5 +8,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <HomeApp />;
+  return <HomeApp news={getNewsSummaries()} />;
 }

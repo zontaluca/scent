@@ -330,6 +330,8 @@ img, svg, canvas { max-width: 100%; }
   .r-device-grid,
   .r-val-grid,
   .v1-award-hero { grid-template-columns: 1fr !important; gap: var(--space-10) !important; }
+  .r-news-wide { grid-template-columns: 1fr !important; }
+  .r-news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .r-hero-visual { min-height: 320px !important; }
   .r-stats-grid,
   .r-spec-grid,
@@ -357,7 +359,8 @@ img, svg, canvas { max-width: 100%; }
   .r-awards-items,
   .r-team-grid,
   .r-device-features,
-  .r-contact-names { grid-template-columns: 1fr !important; }
+  .r-contact-names,
+  .r-news-grid { grid-template-columns: 1fr !important; }
   .r-footer-grid { grid-template-columns: 1fr 1fr !important; gap: var(--space-8) !important; }
   .r-footer-grid > :first-child { grid-column: 1 / -1; }
   .r-device-media { height: 320px !important; }
@@ -374,3 +377,18 @@ img, svg, canvas { max-width: 100%; }
 @media (max-width: 460px) {
   .r-nav-cta { display: none !important; }
 }
+
+/* ============================================================
+   News
+   ============================================================ */
+.news-card .news-read svg { transition: transform var(--duration-base) var(--ease-default); }
+.news-card:hover .news-read svg { transform: translateX(3px); }
+.news-card:focus-visible { outline: 2px solid var(--color-sage-500); outline-offset: 4px; border-radius: var(--radius-xl); }
+.news-link { color: var(--text-brand); text-decoration: none; }
+.news-link:hover { color: var(--color-eucalyptus-700); text-decoration: underline; text-underline-offset: 3px; }
+.news-prose { font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--text-primary); }
+.news-prose > p { margin: 0 0 var(--space-5); max-width: 65ch; text-wrap: pretty; }
+.news-prose > h2 { font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-tight); margin: var(--space-10) 0 var(--space-4); }
+.news-prose > ul { margin: 0 0 var(--space-5); padding-left: 1.2em; }
+.news-prose > ul li { margin-bottom: var(--space-2); }
+.news-prose a { color: var(--text-brand); }
